@@ -7,5 +7,5 @@ target 'StillUndecided' do
 
   # Pods for StillUndecided
   pod "ConcentricProgressRingView"
-
+  pod 'MaterialComponents'
 end

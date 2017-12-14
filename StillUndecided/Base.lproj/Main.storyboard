@@ -14,11 +14,12 @@
         <scene sceneID="aXD-UN-nDa">
             <objects>
                 <tabBarController id="ewx-Vz-AFA" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="L76-zg-YsF">
+                    <tabBar key="tabBar" contentMode="scaleToFill" barStyle="black" translucent="NO" itemPositioning="centered" id="L76-zg-YsF">
                         <rect key="frame" x="0.0" y="975" width="768" height="49"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="barTintColor" red="0.14901960784313725" green="0.14901960784313725" blue="0.14901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="selectedImageTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </tabBar>
                     <connections>
                         <segue destination="wM8-4o-CKl" kind="relationship" relationship="viewControllers" id="UXc-ys-B4W"/>
@@ -32,9 +33,9 @@
         <!--Date View-->
         <scene sceneID="zGx-qa-aBl">
             <objects>
-                <viewController id="wM8-4o-CKl" userLabel="Date View" customClass="ItemTableViewController" customModule="StillUndecided" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController extendedLayoutIncludesOpaqueBars="YES" id="wM8-4o-CKl" userLabel="Date View" customClass="ItemTableViewController" customModule="StillUndecided" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="yd8-Vu-IYD">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="50" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Ub9-ne-xtJ">
@@ -53,14 +54,16 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Fh2-3i-TfJ"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="3s6-rX-JMW"/>
+                    <tabBarItem key="tabBarItem" title="Chronological" image="chronological_icon_white" selectedImage="chronological_icon_white" id="3s6-rX-JMW">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
+                    </tabBarItem>
                     <connections>
                         <outlet property="tableView" destination="Ub9-ne-xtJ" id="muU-zc-Ybl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="95I-qV-nXa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="946" y="-476"/>
+            <point key="canvasLocation" x="945" y="-476.40845070422534"/>
         </scene>
         <!--Statistics View-->
         <scene sceneID="ZqZ-la-pgh">
@@ -79,14 +82,18 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="7mK-nW-i3e"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="XzF-DG-lSP"/>
+                    <tabBarItem key="tabBarItem" title="Statistics" image="statistics_icon_white" selectedImage="statistics_icon_white" id="XzF-DG-lSP"/>
                     <connections>
                         <outlet property="StatisticsContainer" destination="F3l-OW-KQ7" id="FJR-Rm-j3D"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o8l-9M-8B5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="945" y="439"/>
+            <point key="canvasLocation" x="945" y="438.38028169014086"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="chronological_icon_white" width="24" height="24"/>
+        <image name="statistics_icon_white" width="24" height="24"/>
+    </resources>
 </document>

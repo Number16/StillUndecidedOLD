@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MaterialComponents
 
 /*
  
@@ -41,13 +42,50 @@ class ItemTableViewController: UIViewController,TableViewManagerDelegate {
     @IBOutlet weak var tableView: UITableView!
     
     var items = [Item]()
-    var months = [String]()
-    var itemArray = [[Item]]()
+    var itemsSorted = [[Item]]()
+    var itemDataArray = [ItemData]()
     fileprivate var tableViewManager: TableViewManager!
     
+    var headerArray = [String]()
+    
+    func classToStruct(items: [Item]) -> [ItemData]{
+        var data = [ItemData]()
+        var dataItem = ItemData()
+        for item in items {
+            dataItem = ItemData()
+            dataItem.ItemName = item.ItemName
+            dataItem.ItemRating = item.ItemRating
+            dataItem.ItemCategory = item.ItemCategory
+            dataItem.ItemIcon = item.ItemIcon
+            dataItem.ItemDate = item.ItemDate
+            data.append(dataItem)
+        }
+        return data
+    }
     
     
-    private func loadItems() {
+    func structToClass(data: [ItemData]) -> [Item]{
+        var items = [Item]()
+        var item = Item()
+        for dataItem in data {
+            item = Item()
+            item.ItemName = dataItem.ItemName
+            item.ItemRating = dataItem.ItemRating
+            item.ItemCategory = dataItem.ItemCategory
+            item.ItemIcon = dataItem.ItemIcon
+            item.ItemDate = dataItem.ItemDate
+            items.append(item)
+        }
+
+        return items
+    }
+    
+    private func startLoadItems() {
+       
+        
+        
+        
+        
         var item1 = Item()
         item1.ItemName = "League of Justice"
         item1.ItemDate = "21.11.2017"
@@ -55,77 +93,269 @@ class ItemTableViewController: UIViewController,TableViewManagerDelegate {
         item1.ItemCategory = "Movie"
         item1.ItemRating = "4"
         
-        var item2 = Item()
-        item2.ItemName = "War and Peace"
-        item2.ItemDate = "11.12.2017"
-        item2.ItemIcon = "book_icon_white"
-        item2.ItemCategory = "Book"
-        item2.ItemRating = "9"
-        var item3 = Item()
-        item3.ItemName = "McDonald's"
-        item3.ItemDate = "22.12.2017"
-        item3.ItemIcon = "cafe_icon_white"
-        item3.ItemCategory = "Cafe"
-        item3.ItemRating = "9"
+        items.append(item1)
         
-        var item4 = Item()
-        item4.ItemName = "League of Justice"
-        item4.ItemDate = "21.11.2017"
-        item4.ItemIcon = "movie_icon_white"
-        item4.ItemCategory = "Movie"
-        item4.ItemRating = "4"
         
-        var item5 = Item()
-        item5.ItemName = "War and Peace"
-        item5.ItemDate = "11.12.2017"
-        item5.ItemIcon = "book_icon_white"
-        item5.ItemCategory = "Book"
-        item5.ItemRating = "9"
-        var item6 = Item()
-        item6.ItemName = "McDonald's"
-        item6.ItemDate = "22.12.2017"
-        item6.ItemIcon = "cafe_icon_white"
-        item6.ItemCategory = "Cafe"
-        item6.ItemRating = "9"
+        item1 = Item()
+        item1.ItemName = "War and Peace"
+        item1.ItemDate = "11.12.2017"
+        item1.ItemIcon = "book_icon_white"
+        item1.ItemCategory = "Book"
+        item1.ItemRating = "9"
         
-        var item7 = Item()
-        item7.ItemName = "League of Justice"
-        item7.ItemDate = "21.11.2017"
-        item7.ItemIcon = "movie_icon_white"
-        item7.ItemCategory = "Movie"
-        item7.ItemRating = "4"
-    
-        var item8 = Item()
-        item8.ItemName = "War and Peace"
-        item8.ItemDate = "11.12.2017"
-        item8.ItemIcon = "book_icon_white"
-        item8.ItemCategory = "Book"
-        item8.ItemRating = "9"
-        var item9 = Item()
-        item9.ItemName = "McDonald's"
-        item9.ItemDate = "22.12.2017"
-        item9.ItemIcon = "cafe_icon_white"
-        item9.ItemCategory = "Cafe"
-        item9.ItemRating = "9"
+        items.append(item1)
+        
+        item1 = Item()
+        item1.ItemName = "McDonald's"
+        item1.ItemDate = "22.12.2017"
+        item1.ItemIcon = "cafe_icon_white"
+        item1.ItemCategory = "Cafe"
+        item1.ItemRating = "9"
+        
+        items.append(item1)
+        
+        item1 = Item()
+        item1.ItemName = "KFC"
+        item1.ItemDate = "22.10.2017"
+        item1.ItemIcon = "cafe_icon_white"
+        item1.ItemCategory = "Cafe"
+        item1.ItemRating = "8"
+        
+        items.append(item1)
+        
+        item1 = Item()
+        item1.ItemName = "BurgerKing"
+        item1.ItemDate = "22.10.2017"
+        item1.ItemIcon = "cafe_icon_white"
+        item1.ItemCategory = "Cafe"
+        item1.ItemRating = "7"
+        
+        items.append(item1)
+        
+        item1 = Item()
+        item1.ItemName = "Starbucks"
+        item1.ItemDate = "22.10.2017"
+        item1.ItemIcon = "cafe_icon_white"
+        item1.ItemCategory = "Cafe"
+        item1.ItemRating = "8"
+        
+        items.append(item1)
+        
+        item1 = Item()
+        item1.ItemName = "Star Wars VIII"
+        item1.ItemDate = "15.12.2017"
+        item1.ItemIcon = "movie_icon_white"
+        item1.ItemCategory = "Movie"
+        item1.ItemRating = "10"
+        
+        items.append(item1)
+        
+        item1 = Item()
+        item1.ItemName = "Spider Man: Homecoming"
+        item1.ItemDate = "06.07.2017"
+        item1.ItemIcon = "movie_icon_white"
+        item1.ItemCategory = "Movie"
+        item1.ItemRating = "10"
+        
+        items.append(item1)
+        
+        item1 = Item()
+        item1.ItemName = "Republic (Plato)"
+        item1.ItemDate = "19.08.2017"
+        item1.ItemIcon = "book_icon_white"
+        item1.ItemCategory = "Book"
+        item1.ItemRating = "10"
+        
+        items.append(item1)
+        
+        item1 = Item()
+        item1.ItemName = "The Godfather"
+        item1.ItemDate = "15.03.1972"
+        item1.ItemIcon = "movie_icon_white"
+        item1.ItemCategory = "Movie"
+        item1.ItemRating = "9"
+        
+        items.append(item1)
+        
+        item1 = Item()
+        item1.ItemName = "Citizen Kane"
+        item1.ItemDate = "01.05.1941"
+        item1.ItemIcon = "movie_icon_white"
+        item1.ItemCategory = "Movie"
+        item1.ItemRating = "10"
+        
+        items.append(item1)
+        
+        item1 = Item()
+        item1.ItemName = "Slaughterhouse-Five"
+        item1.ItemDate = "11.12.2017"
+        item1.ItemIcon = "book_icon_white"
+        item1.ItemCategory = "Book"
+        item1.ItemRating = "9"
+        
+        items.append(item1)
+        
+        item1 = Item()
+        item1.ItemName = "Thinking, Fast and Slow"
+        item1.ItemDate = "25.10.2011"
+        item1.ItemIcon = "book_icon_white"
+        item1.ItemCategory = "Book"
+        item1.ItemRating = "9"
+        
+        items.append(item1)
+        
+        //definng array
+        var itemDataArray = classToStruct(items: items)
 
-        items += [item1, item2, item3, item4, item5, item6, item7, item8, item9]
+        
+        //serealizing
+        let itemDataDic = itemDataArray.map { $0.convertToDictionary() }
+
+        var str = String()
+        
+        if let itemData = try? JSONSerialization.data(withJSONObject: itemDataDic, options: .prettyPrinted) {
+            str = String(bytes: itemData, encoding: .utf8)!
+        }
+
+        //writing to file
+        let fileName = "data"
+        let DocumentDirURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        
+        let fileURL = DocumentDirURL.appendingPathComponent(fileName).appendingPathExtension("json")
+        
+        do {
+            // Write to the file
+            try str.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
+        } catch let error as NSError {
+            print("Oshybka 1")
+        }
         
         
         
-        let section = TableViewSection()
-        section.headerHeight = 50
-        section.add(items: items)
-        tableViewManager.add(section: section)
+        
+        //riding
+        var readString = ""
+        do {
+            readString = try String(contentsOf: fileURL)
+        } catch let error as NSError {
+            print("Mistake 2")
+        }
+        
+        //to dict
+        let jsonData = readString.data(using: .utf8)
+        let readDictionary = try? JSONSerialization.jsonObject(with: jsonData!, options: .mutableLeaves)
+        dump(readDictionary!)
+        
+//        //dict to array
+//        var itemArray = [Item]()
+//        for (key, value) in items {
+//            arr.append("\(key) \(value)")
+//        }
+        
+        
+        
+        
+        /*
+        let itemDataDic = itemDataArray.map { $0.convertToDictionary() }
+        var str = String()
+        if let itemData = try? JSONSerialization.data(withJSONObject: itemDataDic, options: .prettyPrinted) {
+            str = String(bytes: itemData, encoding: .utf8)!
+        }
+        */
+        
+        
+    }
+    
+    
+    
+    private func loadItems() {
+        
+        headerArray = []
+        tableViewManager.removeAllSections()
         tableView.reloadData()
         
+        
+       
+        
+        sortItems()
+        
+        var section = TableViewSection()
+        section.headerHeight = 50
+        
+        
+        
+        var previousMonth = ""
+        var previousYear = ""
+        
+        for element in items
+        {
+            
+            if ((element.getMonth() != previousMonth)||(element.getYear() != previousYear))
+            {
+                //if new section
+                
+                section = TableViewSection()
+                section.headerHeight = 50
+                section.add(item: element)
+                
+                headerArray.append(Item.getMonthText(date: element.ItemDate!))
+                
+                tableViewManager.add(section: section)
+                tableView.reloadData()
+                
+                
+                previousMonth = element.getMonth()
+                previousYear = element.getYear()
+                
+            }
+            else {
+                //if existing section
+                tableViewManager.remove(section: section)
+                section.add(item: element)
+                tableViewManager.add(section: section)
+                tableView.reloadData()
+                
+            }
+        }
     }
     
     func tableViewManager(_ manager: TableViewManager, headerViewForSection section: Int) -> UITableViewHeaderFooterView? {
         let headerView = manager.tableView.dequeueReusableHeaderFooterView(withIdentifier: "YetAnotherHeader") as! YetAnotherHeader
-//                    let itemGroup = items[section]
-//                    headerView.SectionHeader.text = itemGroup.ItemDate?.uppercased() ?? "ДРИСНЯ"
-        headerView.nameLabel.text = "December"
-                    return headerView
+        headerView.nameLabel.text = headerArray[section]
+        return headerView
+    }
+    
+    func sortItems()
+    {
+        
+        var oldItems = items
+        var newItems = [Item]()
+        var newestItem = oldItems[0]
+        var removeIndex = 0
+        var currentIndex = 0
+        
+        while (oldItems.count>0)
+        {
+            removeIndex = 0
+            currentIndex = 0
+            newestItem = oldItems[0]
+            for element in oldItems
+            {
+                if (Item.isNewer(item1: element, item2: newestItem))
+                {
+                    newestItem = element
+                    removeIndex = currentIndex
+                }
+                currentIndex+=1
+                
+            }
+            
+            newItems.append(newestItem)
+            oldItems.remove(at: removeIndex)
+        }
+        
+        items = newItems
+        
     }
     
 //    @objc func tableViewManager(_ manager: TableViewManager, headerViewForSection section: Int) -> UITableViewHeaderFooterView? {
@@ -149,15 +379,83 @@ class ItemTableViewController: UIViewController,TableViewManagerDelegate {
         tableViewManager.delegate = self
         tableViewManager.register(nibModels: [Item.self])
         tableView.register(YetAnotherHeader.nib(), forHeaderFooterViewReuseIdentifier: "YetAnotherHeader")
-        tableView.sectionHeaderHeight = 88
+        tableView.sectionHeaderHeight = 50
         tableView.estimatedRowHeight = 100
-        tableView.rowHeight = 50
+        tableView.rowHeight = 56
         
+        
+        //Floating Button
+        let floatingButton = MDCFloatingButton()
+        floatingButton.setImage(#imageLiteral(resourceName: "plus_icon_black"), for: .normal)
+        floatingButton.sizeToFit()
+        floatingButton.inkColor =  UIColor(red:0.11, green:0.11, blue:0.11, alpha:0.26)
+        floatingButton.backgroundColor = .white
+        self.view.addSubview(floatingButton)
+        floatingButton.addTarget(self, action: #selector(tapped), for: .touchUpInside)
+        
+        floatingButton.frame.origin.x = self.view.frame.width - floatingButton.frame.width - 16
+        floatingButton.frame.origin.y = self.view.frame.height - floatingButton.frame.height - 16 - 49
+        
+        startLoadItems()
         loadItems()
+        
         
     }
     
+    @objc func tapped(sender: UIButton){
+        print("Button was tapped!")
+        showInputDialog()
+    }
     
+    
+    
+    func showInputDialog() {
+        //Creating UIAlertController and
+        //Setting title and message for the alert dialog
+        let alertController = UIAlertController(title: "New item", message: "Enter name and rating", preferredStyle: .alert)
+        
+        //the confirm action taking the inputs
+        let confirmAction = UIAlertAction(title: "Enter", style: .default) { (_) in
+            
+            let currentDate = Date()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd.MM.yyyy"
+            let date = formatter.string(from: currentDate)
+            
+            //getting the input values from user
+            let name = alertController.textFields?[0].text
+            let rating = alertController.textFields?[1].text
+            let newItem = Item()
+            newItem.ItemName = name
+            newItem.ItemDate = date
+            newItem.ItemIcon = "movie_icon_white"
+            newItem.ItemCategory = "Default"
+            newItem.ItemRating = rating
+            
+            self.items.append(newItem)
+            self.tableView.reloadData()
+            self.loadItems()
+            
+        }
+        
+        //the cancel action doing nothing
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in }
+        
+        //adding textfields to our dialog box
+        alertController.addTextField { (textField) in
+            textField.placeholder = "Enter Name"
+        }
+        alertController.addTextField { (textField) in
+            textField.placeholder = "Enter Rating"
+        }
+        
+        //adding the action to dialogbox
+        alertController.addAction(confirmAction)
+        alertController.addAction(cancelAction)
+        
+        //finally presenting the dialog box
+        self.present(alertController, animated: true, completion: nil)
+    }
     override func didReceiveMemoryWarning() {
         
         super.didReceiveMemoryWarning()
@@ -205,9 +503,9 @@ class ItemTableViewController: UIViewController,TableViewManagerDelegate {
     //        // Table view cells are reused and should be dequeued using a cell identifier.
     //        let cellIdentifier = "ItemTableViewCell"
     //        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? ItemTableViewCell else {
-    //            fatalError("Drisnya happened")
+    //            fatalError("something happened")
     //        }
-    //        print(indexPath.section,"thiiiiSDRISNYA ",indexPath.row)
+    //        print(indexPath.section,"thiiiiSsmth ",indexPath.row)
     //        let item = itemArray[indexPath.section][indexPath.row]
     //
     //        cell.NameLabel.text = item.ItemName

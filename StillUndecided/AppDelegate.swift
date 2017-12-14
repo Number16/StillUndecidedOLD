@@ -14,9 +14,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        UIApplication.shared.statusBarView?.backgroundColor = UIColor(red:0.11, green:0.11, blue:0.11, alpha:1.0)
         return true
     }
 }
+
+
 extension UIApplication {
     
     var statusBarView: UIView? {
