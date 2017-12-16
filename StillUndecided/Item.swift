@@ -40,12 +40,37 @@ struct ItemData: Codable {
         return dic
     }
     
-    init(ItemName: String?, ItemRating: String?, ItemCategory: String?, ItemIcon: String?, ItemDate: String?) {
+    init(ItemName: String?, ItemRating: String?, ItemCategory: String?, ItemDate: String?) {
         self.ItemName = ItemName
         self.ItemRating = ItemRating
         self.ItemCategory = ItemCategory
-        self.ItemIcon = ItemIcon
         self.ItemDate = ItemDate
+        
+        
+        switch (ItemDate) {
+            case "Airport"?: self.ItemIcon = "movie_icon_white"
+            case "Album"?: self.ItemIcon = "show_icon_white"
+            case "Book"?: self.ItemIcon = "book_icon_white"
+            case "Cafe"?: self.ItemIcon = "cafe_icon_white"
+            case "Camera"?: self.ItemIcon = "camera_icon_white"
+            case "Company"?: self.ItemIcon = "company_icon_white"
+            case "Hotel"?: self.ItemIcon = "hotel_icon_white"
+            case "Laptop"?: self.ItemIcon = "laptop_icon_white"
+            case "Mall"?: self.ItemIcon = "mall_icon_white"
+            case "Movie"?: self.ItemIcon = "movie_icon_white"
+            case "Operator"?: self.ItemIcon = "operator_icon_white"
+            case "Restaurant"?: self.ItemIcon = "restaurant_icon_white"
+            case "TV Show"?: self.ItemIcon = "show_icon_white"
+            case "Smartphone"?: self.ItemIcon = "smartphone_icon_white"
+            case "Song"?: self.ItemIcon = "song_icon_white"
+            case "TV"?: self.ItemIcon = "tv_icon_white"
+            case "Videogame"?: self.ItemIcon = "videogame_icon_white"
+            case "Website"?: self.ItemIcon = "website_icon_white"
+        case .none:
+            self.ItemIcon = nil
+        case .some(_):
+            self.ItemIcon = nil
+        }
 
     }
     
@@ -58,13 +83,19 @@ struct ItemData: Codable {
     }
 }
 
-
-
-
+class Category {
+    var CategoryName: String?
+    var CategoryIcon: String?
+    
+    init (CategoryName: String?, CategoryIcon: String?) {
+        self.CategoryName = CategoryName
+        self.CategoryIcon = CategoryIcon
+    }
+}
 
 final class Item: NSObject, CellViewModel {
     
-    
+
     
     var enabled: Bool = false
     var cellHeight: CGFloat = 56

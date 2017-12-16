@@ -37,13 +37,41 @@ import MaterialComponents
 
 
 
-class ItemTableViewController: UIViewController,TableViewManagerDelegate {
+class ItemTableViewController: UIViewController,TableViewManagerDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 18
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let categoryCell = collectionView.dequeueReusableCell(withReuseIdentifier: "categoryCell", for: indexPath)
+        categoryCell.backgroundColor = UIColor.white
+        return categoryCell
+    }
+    
+
     
     @IBOutlet weak var tableView: UITableView!
     
+    var wasPressed = false
+    var savedBlurView: UIVisualEffectView?
+    var savedAddNewButton: MDCFloatingButton?
+    var savedAddNewCategoryButton: MDCFloatingButton?
+    var savedFloatingButton: MDCFloatingButton?
+    
+    
+
+    
+    
+    
+    
     var items = [Item]()
-    var itemsSorted = [[Item]]()
+    var itemsDouble = [[Item]]()
+
+    var sectionIndexes = [Int]()
+    
     var itemDataArray = [ItemData]()
+    var sectionArray = [TableViewSection]()
     fileprivate var tableViewManager: TableViewManager!
     
     var headerArray = [String]()
@@ -80,13 +108,35 @@ class ItemTableViewController: UIViewController,TableViewManagerDelegate {
         return items
     }
     
+    func writeItemsToFile() {
+        //definng array
+        var itemDataArray = classToStruct(items: items)
+        //serealizing
+        let itemDataDic = itemDataArray.map { $0.convertToDictionary() }
+        
+        var str = String()
+        
+        if let itemData = try? JSONSerialization.data(withJSONObject: itemDataDic, options: .prettyPrinted) {
+            str = String(bytes: itemData, encoding: .utf8)!
+        }
+        
+        //writing to file
+        let fileName = "data"
+        let DocumentDirURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        
+        let fileURL = DocumentDirURL.appendingPathComponent(fileName).appendingPathExtension("json")
+        
+        do {
+            // Write to the file
+            try str.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
+        } catch let error as NSError {
+            print("Oshybka 1")
+        }
+    }
+    
     private func startLoadItems() {
-       
-        
-        
-        
-        
         var item1 = Item()
+        
         item1.ItemName = "League of Justice"
         item1.ItemDate = "21.11.2017"
         item1.ItemIcon = "movie_icon_white"
@@ -179,6 +229,7 @@ class ItemTableViewController: UIViewController,TableViewManagerDelegate {
         
         item1 = Item()
         item1.ItemName = "Citizen Kane"
+        
         item1.ItemDate = "01.05.1941"
         item1.ItemIcon = "movie_icon_white"
         item1.ItemCategory = "Movie"
@@ -204,36 +255,11 @@ class ItemTableViewController: UIViewController,TableViewManagerDelegate {
         
         items.append(item1)
         
-        //definng array
-        var itemDataArray = classToStruct(items: items)
-
-        
-        //serealizing
-        let itemDataDic = itemDataArray.map { $0.convertToDictionary() }
-
-        var str = String()
-        
-        if let itemData = try? JSONSerialization.data(withJSONObject: itemDataDic, options: .prettyPrinted) {
-            str = String(bytes: itemData, encoding: .utf8)!
-        }
-
-        //writing to file
+        //reading
         let fileName = "data"
         let DocumentDirURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
         
         let fileURL = DocumentDirURL.appendingPathComponent(fileName).appendingPathExtension("json")
-        
-        do {
-            // Write to the file
-            try str.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
-        } catch let error as NSError {
-            print("Oshybka 1")
-        }
-        
-        
-        
-        
-        //riding
         var readString = ""
         do {
             readString = try String(contentsOf: fileURL)
@@ -243,32 +269,36 @@ class ItemTableViewController: UIViewController,TableViewManagerDelegate {
         
         //to dict
         let jsonData = readString.data(using: .utf8)
-        let readDictionary = try? JSONSerialization.jsonObject(with: jsonData!, options: .mutableLeaves)
-        dump(readDictionary!)
         
-//        //dict to array
-//        var itemArray = [Item]()
-//        for (key, value) in items {
-//            arr.append("\(key) \(value)")
-//        }
+        var newItems = [Item]()
+        var newItem = Item()
         
         
         
-        
-        /*
-        let itemDataDic = itemDataArray.map { $0.convertToDictionary() }
-        var str = String()
-        if let itemData = try? JSONSerialization.data(withJSONObject: itemDataDic, options: .prettyPrinted) {
-            str = String(bytes: itemData, encoding: .utf8)!
+        if let jsonDataArray = try? JSONSerialization.jsonObject(with: jsonData!, options: []) as? [[String: Any]] {
+            for dataElement in jsonDataArray! {
+                newItem = Item()
+                newItem.ItemName = dataElement["ItemName"] as! String
+                newItem.ItemRating = dataElement["ItemRating"] as! String
+                newItem.ItemCategory = dataElement["ItemCategory"] as! String
+                newItem.ItemIcon = dataElement["ItemIcon"] as! String
+                newItem.ItemDate = dataElement["ItemDate"] as! String
+                newItems.append(newItem)
+            }
         }
-        */
+        //items = newItems
+        
+        
+        
         
         
     }
     
     
     
-    private func loadItems() {
+    private func insertItems() {
+        
+        sectionIndexes = []
         
         headerArray = []
         tableViewManager.removeAllSections()
@@ -287,6 +317,8 @@ class ItemTableViewController: UIViewController,TableViewManagerDelegate {
         var previousMonth = ""
         var previousYear = ""
         
+        var sectionNumber = -1
+        
         for element in items
         {
             
@@ -301,11 +333,17 @@ class ItemTableViewController: UIViewController,TableViewManagerDelegate {
                 headerArray.append(Item.getMonthText(date: element.ItemDate!))
                 
                 tableViewManager.add(section: section)
+                sectionArray.append(section)
                 tableView.reloadData()
                 
                 
                 previousMonth = element.getMonth()
                 previousYear = element.getYear()
+                
+                
+                sectionNumber += 1
+                sectionIndexes.append(0)
+                sectionIndexes[sectionNumber] += 1
                 
             }
             else {
@@ -313,10 +351,15 @@ class ItemTableViewController: UIViewController,TableViewManagerDelegate {
                 tableViewManager.remove(section: section)
                 section.add(item: element)
                 tableViewManager.add(section: section)
+                sectionArray.append(section)
                 tableView.reloadData()
+                sectionIndexes[sectionNumber] += 1
                 
             }
         }
+        writeItemsToFile()
+        tableView.reloadData()
+        
     }
     
     func tableViewManager(_ manager: TableViewManager, headerViewForSection section: Int) -> UITableViewHeaderFooterView? {
@@ -327,36 +370,42 @@ class ItemTableViewController: UIViewController,TableViewManagerDelegate {
     
     func sortItems()
     {
-        
-        var oldItems = items
-        var newItems = [Item]()
-        var newestItem = oldItems[0]
-        var removeIndex = 0
-        var currentIndex = 0
-        
-        while (oldItems.count>0)
-        {
-            removeIndex = 0
-            currentIndex = 0
-            newestItem = oldItems[0]
-            for element in oldItems
+        if !(items.isEmpty) {
+            var oldItems = items
+            var newItems = [Item]()
+            var newestItem = oldItems[0]
+            var removeIndex = 0
+            var currentIndex = 0
+            
+            while (oldItems.count>0)
             {
-                if (Item.isNewer(item1: element, item2: newestItem))
+                removeIndex = 0
+                currentIndex = 0
+                newestItem = oldItems[0]
+                for element in oldItems
                 {
-                    newestItem = element
-                    removeIndex = currentIndex
+                    if (Item.isNewer(item1: element, item2: newestItem))
+                    {
+                        newestItem = element
+                        removeIndex = currentIndex
+                    }
+                    currentIndex+=1
+                    
                 }
-                currentIndex+=1
                 
+                newItems.append(newestItem)
+                oldItems.remove(at: removeIndex)
             }
             
-            newItems.append(newestItem)
-            oldItems.remove(at: removeIndex)
+            items = newItems
         }
         
-        items = newItems
         
     }
+   
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return 0
+//    }
     
 //    @objc func tableViewManager(_ manager: TableViewManager, headerViewForSection section: Int) -> UITableViewHeaderFooterView? {
 //            let headerView = manager.tableView.dequeueReusableHeaderFooterView(withIdentifier: "TableSectionHeader") as! TableSectionHeader
@@ -369,6 +418,116 @@ class ItemTableViewController: UIViewController,TableViewManagerDelegate {
         super.viewWillAppear(animated)
         UIApplication.shared.statusBarStyle = .lightContent
     }
+    
+//    func tableViewManager(_ manager: TableViewManager, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete {
+//
+//
+//            sectionArray[indexPath.section].remove(item: items[indexPath.row])
+//            print(indexPath.row)
+//            var removeIndex = 0
+//
+//                if (indexPath.section != 0)
+//                {
+//                    for i in 0...indexPath.section-1 {
+//                        removeIndex+=self.sectionIndexes[i]
+//                    }
+//                }
+//                    removeIndex+=indexPath.row
+//
+//                    items.remove(at: removeIndex)
+//
+//                    insertItems()
+//                    writeItemsToFile()
+//
+//                    } else if editingStyle == .insert {
+//
+//        }
+//    }
+    
+     func tableViewManager(_ manager: TableViewManager, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+    {
+        let shareAction = UIContextualAction(style: .normal, title: "Share") { (action, view, handler) in
+            
+            self.sectionArray[indexPath.section].remove(item: self.items[indexPath.row])
+            print(indexPath.row)
+            
+            var shareIndex = 0
+            var title = String()
+            var rating = String()
+            
+            if (indexPath.section != 0){
+                
+                for i in 0...indexPath.section-1 {
+                    shareIndex+=self.sectionIndexes[i]
+                }
+            }
+            shareIndex+=indexPath.row
+            
+            title = self.items[shareIndex].ItemName!
+            rating = self.items[shareIndex].ItemRating!
+            
+            UIGraphicsBeginImageContext(view.frame.size)
+            view.layer.render(in: UIGraphicsGetCurrentContext()!)
+            UIGraphicsEndImageContext()
+            
+            let textToShare = "I rated «" + title + "» at " + rating + " out of 10"
+
+            let objectsToShare = [textToShare] as [Any]
+            let shareWindow = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+            
+            //Excluded Activities
+            shareWindow.excludedActivityTypes = [UIActivityType.airDrop, UIActivityType.addToReadingList]
+            //
+            
+            self.present(shareWindow, animated: true, completion: nil)
+            }
+            
+        
+    
+        
+        
+        var shareImage = UIImage(named: "share_icon_black")?.withRenderingMode(.alwaysOriginal)
+        shareAction.backgroundColor = UIColor(red:0.11, green:0.11, blue:0.11, alpha:0.0)
+        shareAction.image = shareImage
+        
+        
+        
+        
+        let configuration = UISwipeActionsConfiguration(actions: [shareAction])
+        return configuration
+    }
+    
+    
+     func tableViewManager(_ manager: TableViewManager, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+    {
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, handler) in
+        
+            self.sectionArray[indexPath.section].remove(item: self.items[indexPath.row])
+            print(indexPath.row)
+            var removeIndex = 0
+            
+            if (indexPath.section != 0){
+            
+                  for i in 0...indexPath.section-1 {
+                      removeIndex+=self.sectionIndexes[i]
+                  }
+              }
+                  removeIndex+=indexPath.row
+            
+                  self.items.remove(at: removeIndex)
+            
+                  self.insertItems()
+        }
+        deleteAction.backgroundColor = UIColor(red:0.11, green:0.11, blue:0.11, alpha:0.0)
+        deleteAction.image = UIImage(named: "delete_icon_black")
+        
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        return configuration
+    }
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -391,20 +550,151 @@ class ItemTableViewController: UIViewController,TableViewManagerDelegate {
         floatingButton.inkColor =  UIColor(red:0.11, green:0.11, blue:0.11, alpha:0.26)
         floatingButton.backgroundColor = .white
         self.view.addSubview(floatingButton)
-        floatingButton.addTarget(self, action: #selector(tapped), for: .touchUpInside)
+        floatingButton.addTarget(self, action: #selector(callFABMenu), for: .touchUpInside)
         
         floatingButton.frame.origin.x = self.view.frame.width - floatingButton.frame.width - 16
         floatingButton.frame.origin.y = self.view.frame.height - floatingButton.frame.height - 16 - 49
         
         startLoadItems()
-        loadItems()
+        insertItems()
+        
+        
         
         
     }
     
-    @objc func tapped(sender: UIButton){
-        print("Button was tapped!")
-        showInputDialog()
+    @objc func callFABMenu(sender: MDCFloatingButton){
+        savedFloatingButton = sender
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.impactOccurred()
+        let blurEffect = UIBlurEffect(style: .dark)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        //always fill the view
+        blurEffectView.frame = self.view.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        let addNewButton = MDCFloatingButton()
+        let addNewCategoryButton = MDCFloatingButton()
+        
+        
+        if wasPressed==false {
+            
+            wasPressed = true
+            
+            UIApplication.shared.statusBarView?.backgroundColor = UIColor(red:0.11, green:0.11, blue:0.11, alpha:0)
+            
+            view.insertSubview(blurEffectView, belowSubview: sender)
+            savedBlurView = blurEffectView
+            blurEffectView.alpha = 0
+            
+            UIView.animate(withDuration: 0.3) {
+                UIApplication.shared.statusBarView?.backgroundColor = UIColor(red:0.11, green:0.11, blue:0.11, alpha:0.1)
+                blurEffectView.alpha = 1.0
+            }
+            
+            UIView.animate(withDuration: 0.15, animations: {
+                sender.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 4)
+            })
+            
+            
+            
+            
+            addNewCategoryButton.setImage(#imageLiteral(resourceName: "category_icon_black"), for: .normal)
+            addNewCategoryButton.frame.size = CGSize(width: 40, height: 40)
+            addNewCategoryButton.inkColor =  UIColor(red:0.11, green:0.11, blue:0.11, alpha:0.26)
+            addNewCategoryButton.backgroundColor = .white
+            self.view.insertSubview(addNewCategoryButton, belowSubview: addNewButton)
+            addNewCategoryButton.frame.origin.x = self.view.frame.width - addNewCategoryButton.frame.width - 24
+            addNewCategoryButton.frame.origin.y = self.view.frame.height - addNewCategoryButton.frame.height - sender.frame.height - 8 - 49
+            savedAddNewCategoryButton = addNewCategoryButton;
+            
+            addNewCategoryButton.alpha = 0
+            UIView.animate(withDuration: 0.2) {
+                addNewCategoryButton.alpha = 1.0
+            }
+
+            
+            addNewButton.setImage(#imageLiteral(resourceName: "star_icon_black"), for: .normal)
+            addNewButton.frame.size = CGSize(width: 40, height: 40)
+            addNewButton.inkColor =  UIColor(red:0.11, green:0.11, blue:0.11, alpha:0.26)
+            addNewButton.backgroundColor = .white
+            self.view.insertSubview(addNewButton, belowSubview: sender)
+            addNewButton.frame.origin.x = self.view.frame.width - addNewButton.frame.width - 24
+            addNewButton.frame.origin.y = self.view.frame.height - addNewButton.frame.height - addNewButton.frame.height - sender.frame.height - 24 - 49
+            addNewButton.addTarget(self, action: #selector(addNew), for: .touchUpInside)
+            savedAddNewButton = addNewButton;
+            
+            addNewButton.alpha = 0
+            UIView.animate(withDuration: 0.2, delay: 0.035, options: [], animations: {
+                addNewButton.alpha = 1.0
+                
+                
+            
+            })
+            
+            
+            
+            
+            
+        } else {
+            
+            wasPressed = false
+            
+            
+            
+            UIView.animate(withDuration: 0.3) {
+                UIApplication.shared.statusBarView?.backgroundColor = UIColor(red:0.11, green:0.11, blue:0.11, alpha:1.0)
+                self.savedBlurView?.alpha = 0
+            }
+
+            
+            
+            UIView.animate(withDuration: 0.2) {
+                self.savedAddNewButton?.alpha = 0
+            }
+            
+            UIView.animate(withDuration: 0.2, delay: 0.035, options: [], animations: {
+                self.savedAddNewCategoryButton?.alpha = 0
+            })
+            
+            UIView.animate(withDuration: 0.15, animations: {
+                sender.transform = CGAffineTransform(rotationAngle: 0)
+            })
+            
+            
+        }
+        
+    
+        
+    }
+    
+    @objc func addNew(sender: UIButton){
+        UIView.animate(withDuration: 0.2) {
+            self.savedAddNewButton?.alpha = 0
+        }
+        
+        UIView.animate(withDuration: 0.2, delay: 0.035, options: [], animations: {
+            self.savedAddNewCategoryButton?.alpha = 0
+        })
+        UIView.animate(withDuration: 0.2, delay: 0.050, options: [], animations: {
+            self.savedFloatingButton?.alpha = 0
+        })
+        
+        
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        layout.itemSize = CGSize(width: view.frame.size.width/3 - 20, height: view.frame.size.height/6)
+        
+        let myCollectionView:UICollectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
+        myCollectionView.dataSource = self
+        myCollectionView.delegate = self
+        myCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "categoryCell")
+        myCollectionView.backgroundColor = UIColor(red:0.11, green:0.11, blue:0.11, alpha:0.0)
+        myCollectionView.alpha = 0
+        view.insertSubview(myCollectionView, belowSubview: sender)
+        UIView.animate(withDuration: 0.4, delay: 0, options: [], animations: {
+            myCollectionView.alpha = 1.0
+        })
+        
     }
     
     
@@ -434,7 +724,8 @@ class ItemTableViewController: UIViewController,TableViewManagerDelegate {
             
             self.items.append(newItem)
             self.tableView.reloadData()
-            self.loadItems()
+            self.insertItems()
+            self.writeItemsToFile()
             
         }
         

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2E1126FA1FE18D3E008460F7 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1126F91FE18D3E008460F7 /* StatisticsViewController.swift */; };
+		2E8591AD1FE5C1670004016F /* CategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E8591AC1FE5C1670004016F /* CategoryTableViewController.swift */; };
 		9A7D26C41C4E93628F2DC898 /* Pods_StillUndecided.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7832FF42C199D657E58F84EC /* Pods_StillUndecided.framework */; };
 		C7D29B8B1FDFFD4B00D08D23 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D29B8A1FDFFD4B00D08D23 /* AppDelegate.swift */; };
 		C7D29B8D1FDFFD4B00D08D23 /* ItemTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D29B8C1FDFFD4B00D08D23 /* ItemTableViewController.swift */; };
@@ -23,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		2E1126F91FE18D3E008460F7 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
+		2E8591AC1FE5C1670004016F /* CategoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewController.swift; sourceTree = "<group>"; };
 		7832FF42C199D657E58F84EC /* Pods_StillUndecided.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_StillUndecided.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7D29B871FDFFD4B00D08D23 /* StillUndecided.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StillUndecided.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7D29B8A1FDFFD4B00D08D23 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				C7D29B8E1FDFFD4B00D08D23 /* Main.storyboard */,
+				2E8591AC1FE5C1670004016F /* CategoryTableViewController.swift */,
 				C7D29BA81FE00C5400D08D23 /* YetAnotherHeader.xib */,
 				C7D29BA61FDFFE4C00D08D23 /* ItemTableViewCell.xib */,
 				C7D29B931FDFFD4B00D08D23 /* LaunchScreen.storyboard */,
@@ -251,6 +254,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E8591AD1FE5C1670004016F /* CategoryTableViewController.swift in Sources */,
 				C7D29BA11FDFFDFF00D08D23 /* Item.swift in Sources */,
 				C7D29B9F1FDFFDEE00D08D23 /* ItemTableViewCell.swift in Sources */,
 				C7D29B8D1FDFFD4B00D08D23 /* ItemTableViewController.swift in Sources */,
@@ -397,6 +401,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q7F35RDRSE;
 				INFOPLIST_FILE = StillUndecided/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "styleru-fan-1.StillUndecided";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -413,6 +418,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q7F35RDRSE;
 				INFOPLIST_FILE = StillUndecided/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "styleru-fan-1.StillUndecided";
 				PRODUCT_NAME = "$(TARGET_NAME)";

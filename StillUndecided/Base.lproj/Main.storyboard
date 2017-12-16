@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -24,11 +23,47 @@
                     <connections>
                         <segue destination="wM8-4o-CKl" kind="relationship" relationship="viewControllers" id="UXc-ys-B4W"/>
                         <segue destination="FfZ-Yf-yRf" kind="relationship" relationship="viewControllers" id="ZaX-62-6IA"/>
+                        <segue destination="7yZ-Dd-PY4" kind="relationship" relationship="viewControllers" id="Ptw-Ad-zab"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ApH-Hq-wtO" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="0.0" y="0.0"/>
+        </scene>
+        <!--Date View-->
+        <scene sceneID="HWh-1M-9fb">
+            <objects>
+                <viewController extendedLayoutIncludesOpaqueBars="YES" id="7yZ-Dd-PY4" userLabel="Date View" customClass="CategoryTableViewController" customModule="StillUndecided" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="F3v-wf-2RE">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="50" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Att-gb-7S8">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
+                                <color key="backgroundColor" red="0.1058823529" green="0.1058823529" blue="0.1058823529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="separatorColor" red="0.1058823529" green="0.1058823529" blue="0.1058823529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.1058823529" green="0.1058823529" blue="0.1058823529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Att-gb-7S8" firstAttribute="top" secondItem="F3v-wf-2RE" secondAttribute="top" id="2if-1z-jmH"/>
+                            <constraint firstItem="Att-gb-7S8" firstAttribute="bottom" secondItem="nVd-lq-tVX" secondAttribute="bottom" id="NwH-t6-KxK"/>
+                            <constraint firstItem="Att-gb-7S8" firstAttribute="trailing" secondItem="nVd-lq-tVX" secondAttribute="trailing" id="bx0-HA-dZL"/>
+                            <constraint firstItem="Att-gb-7S8" firstAttribute="leading" secondItem="nVd-lq-tVX" secondAttribute="leading" id="f9i-Eo-HJp"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="nVd-lq-tVX"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Chronological" image="chronological_icon_white" selectedImage="chronological_icon_white" id="JUL-Ro-UYx">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
+                    </tabBarItem>
+                    <connections>
+                        <outlet property="tableView" destination="Att-gb-7S8" id="wPM-2B-Tnc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VqS-3f-WnB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="371" y="-733"/>
         </scene>
         <!--Date View-->
         <scene sceneID="zGx-qa-aBl">
@@ -63,7 +98,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="95I-qV-nXa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="945" y="-476.40845070422534"/>
+            <point key="canvasLocation" x="1044" y="-499"/>
         </scene>
         <!--Statistics View-->
         <scene sceneID="ZqZ-la-pgh">

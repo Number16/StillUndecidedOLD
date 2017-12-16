@@ -9,6 +9,7 @@
 import UIKit
 import ConcentricProgressRingView
 import LionheartExtensions
+import MaterialComponents
 
 class StatisticsViewController: UIViewController {
 
@@ -34,6 +35,7 @@ class StatisticsViewController: UIViewController {
         progressRingView[0].setProgress(0.9, duration: 1)
         progressRingView[1].setProgress(0.7, duration: 1)
         progressRingView[2].setProgress(0.5, duration: 1)
+        
         
         
         view.backgroundColor = UIColor.black

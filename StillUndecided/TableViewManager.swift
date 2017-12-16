@@ -5,6 +5,9 @@ import UIKit
 @objc protocol TableViewManagerDelegate: UIScrollViewDelegate {
     @objc optional func tableViewManager(_ manager: TableViewManager, headerViewForSection section: Int) -> UITableViewHeaderFooterView?
     @objc optional func tableViewManager(_ manager: TableViewManager, footerViewForSection section: Int) -> UITableViewHeaderFooterView?
+    @objc optional func tableViewManager(_ manager: TableViewManager, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+    @objc optional func tableViewManager(_ manager: TableViewManager, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+//    @objc optional func tableViewManager(_ manager: TableViewManager, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath)
 }
 
 class TableViewManager: NSObject {
@@ -53,6 +56,19 @@ class TableViewManager: NSObject {
 }
 
 extension TableViewManager : UITableViewDataSource {
+//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+//        delegate?.tableViewManager?(self, commit: editingStyle, forRowAt: indexPath)
+//    }
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+    {
+        return delegate?.tableViewManager?(self, leadingSwipeActionsConfigurationForRowAt: indexPath)
+    
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+    {
+        return delegate?.tableViewManager?(self, trailingSwipeActionsConfigurationForRowAt: indexPath)
+    }
     
     public func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
